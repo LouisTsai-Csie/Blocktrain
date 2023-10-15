@@ -29,4 +29,25 @@ contract WrappedTokenTest is Test {
         vm.stopPrank();
     }
 
+    function test_DepositTokenAmountEqualReceiveEtherBalance() public {
+        // create user account
+        address user = makeAddr("user");
+        // set user address for the following function call
+        vm.startPrank(user);
+        // set ether balance for user
+        deal(user, 1 wei);
+        // user ether balance before deposit operation
+        uint256 originalEthAmount = payable(weth).balance;
+        // user deposit 1 ether balance to the contract
+        weth.deposit{value: 1 wei}();
+        // total ether balance of user after deposit operation
+        uint256 totalEthAmount = payable(weth).balance;
+        // calculate ether balance difference
+        uint256 receiveEthAmount = totalEthAmount - originalEthAmount;
+        // check deposit token amount balance and receive ether balance
+        assertEq(receiveEthAmount, 1 wei);
+        // stop prank and exit the test
+        vm.stopPrank();
+    }
+
 }
