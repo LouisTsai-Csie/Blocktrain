@@ -96,4 +96,23 @@ contract WrappedTokenTest is IWETHEvents, Test {
         // stop prank and exit the test
         vm.stopPrank();
     }
+
+    function test_CheckWithdrawEventEmitSuccess() public {
+        // create user account
+        address user = makeAddr("user");
+        // set user address for the following function call
+        vm.startPrank(user);
+        // set ether balance for user
+        deal(user, 1 ether);
+        // user deposit 1 ether balance to the contract
+        weth.deposit{value: 1 ether}();
+        // expected verification format, topic 1 and data field
+        vm.expectEmit(true, false, false, false);
+        // emit the desired withdraw event result
+        emit WithdrawalEvent(user, 1 ether);
+        // make withdraw function and check event result
+        weth.withdraw(1);
+        // stop prank and exit the test
+        vm.stopPrank();
+    }
 }
