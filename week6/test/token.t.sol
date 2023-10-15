@@ -195,4 +195,28 @@ contract WrappedTokenTest is IWETHEvents, Test {
         vm.stopPrank();
     }
 
+    function test_ValidateERC20TransferFrom() public {
+        // create user1 account
+        address user1 = makeAddr("user1");
+        // create user2 account
+        address user2 = makeAddr("user2");
+        // create user3 account
+        address user3 = makeAddr("user3");
+        // set user1 address for the following function call
+        vm.startPrank(user1);
+        // set ether balance for user1
+        deal(user1, 1 ether);
+        // user1 deposit 1 ether balance to the contract and get ERC20 token
+        weth.deposit{value: 1 ether}();
+        // user1 approve ERC20 token allowance for user2
+        weth.approve(user2, 1 ether);
+        // set user2 address for the following function call
+        vm.startPrank(user2);
+        // transfer token from user1 to user3 based on the user2 token allowance
+        bool success = weth.transferFrom(user1, user3, 1 ether);
+        assertEq(success, true);
+        // stop prank and exit the test
+        vm.stopPrank();
+    }
+
 }
