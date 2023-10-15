@@ -145,4 +145,27 @@ contract WrappedTokenTest is IWETHEvents, Test {
         vm.stopPrank();
     }
 
+    function test_ValidateApproveTokenAmount() public {
+        // create user1 account
+        address user1 = makeAddr("user1");
+        // create user2 account
+        address user2 = makeAddr("user2");
+        // set user address for the following function call
+        vm.startPrank(user1);
+        // check user1 original allowance for user2
+        uint256 user2OriginalAllowance = weth.allowance(user1, user2);
+        // set ether balance for user
+        deal(user1, 1 ether);
+        // user1 deposit 1 ether balance to the contract
+        weth.deposit{value: 1 ether}();
+        // user1 approve ether for user2
+        weth.approve(user2, 1 ether);
+        // check user2 approve allowance for user2
+        uint256 user2ApproveAllowance = weth.allowance(user1, user2);
+        // assert the user1 allowance amount for user2
+        assertEq(user2ApproveAllowance-user2OriginalAllowance, 1 ether);
+        // stop prank and exit the test
+        vm.stopPrank();
+    }
+
 }
