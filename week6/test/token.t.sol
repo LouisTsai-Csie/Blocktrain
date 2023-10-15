@@ -5,7 +5,12 @@ import {Test, console2} from "forge-std/Test.sol";
 
 import {WETH} from "../src/token.sol";
 
-contract WrappedTokenTest is Test {
+interface IWETHEvents {
+    event  DepositEvent(address indexed addr, uint256 amount);
+    event  WithdrawalEvent(address indexed addr, uint256 amount);
+}
+
+contract WrappedTokenTest is IWETHEvents, Test {
     WETH public weth;
 
     function setUp() public {
@@ -50,4 +55,20 @@ contract WrappedTokenTest is Test {
         vm.stopPrank();
     }
 
+    function test_CheckDepositEventEmitSuccess() public {
+        // create user account
+        address user = makeAddr("user");
+        // set user address for the following function call
+        vm.startPrank(user);
+        // set ether balance for user
+        deal(user, 1 ether);
+        // expected verification format, topic 1 and data field
+        vm.expectEmit(true, false, false, true);
+        // emit the desired deposit event result
+        emit DepositEvent(user, 1 ether);
+        // make deposit function and check event result
+        weth.deposit{value: 1 ether}();
+        // stop prank and exit the test
+        vm.stopPrank();
+    }
 }
