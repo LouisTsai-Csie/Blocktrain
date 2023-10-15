@@ -115,4 +115,34 @@ contract WrappedTokenTest is IWETHEvents, Test {
         // stop prank and exit the test
         vm.stopPrank();
     }
+
+    function test_ValidateTransferTokenAmount() public {
+        // create user1 account
+        address user1 = makeAddr("user1");
+        // create user2 account
+        address user2 = makeAddr("user2");
+        // set user address for the following function call
+        vm.startPrank(user1);
+        // set ether balance for user
+        deal(user1, 1 ether);
+        // user deposit 1 ether balance to the contract
+        weth.deposit{value: 1 ether}();
+        // check user1 original ERC20 balance before token transfer
+        uint256 user1OriginalERC20Amount = weth.balanceOf(user1);
+        // check user2 original ERC20 balance before token transfer
+        uint256 user2OriginalERC20Amount = weth.balanceOf(user2);
+        // transfer ERC20 token from user1 to user 2
+        weth.transfer(user2, 1);
+        // check user1 total ERC20 balance after token transfer
+        uint256 user1TotakERC20Amount = weth.balanceOf(user1);
+        // check user 2 total ERC20 balance after token transfer
+        uint256 user2TokenERC20Amount = weth.balanceOf(user2);
+        // assert the transfer amount for user1
+        assertEq(user1OriginalERC20Amount - user1TotakERC20Amount, 1);
+        // assert the transfer amount for user2
+        assertEq(user2TokenERC20Amount - user2OriginalERC20Amount, 1);
+        // stop prank and exit the test
+        vm.stopPrank();
+    }
+
 }
