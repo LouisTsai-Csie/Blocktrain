@@ -71,4 +71,29 @@ contract WrappedTokenTest is IWETHEvents, Test {
         // stop prank and exit the test
         vm.stopPrank();
     }
+
+    function test_WithdrawBurnTokenAmountEqualInputAmount() public {
+        // create user account
+        address user = makeAddr("user");
+        // set user address for the following function call
+        vm.startPrank(user);
+        // set ether balance for user
+        deal(user, 1 ether);
+        // user deposit 1 ether balance to the contract
+        weth.deposit{value: 1 ether}();
+        // configure burning ether amount
+        uint256 burnAmount = 1;
+        // check original ERC20 token amount before withdraw operation
+        uint256 originalERC20Amount = weth.balanceOf(user);
+        // perform withdraw with burnAmount as parameter
+        weth.withdraw(burnAmount);
+        // check the total ERC20 token amount after withdraw operation
+        uint256 totalERC20Amount = weth.balanceOf(user);
+        // check the burning ERC20 token amount after withdraw operation
+        uint256 burnERC20Amount = originalERC20Amount - totalERC20Amount;
+        // check the equivalence of burnAmount and burnERC20AMount
+        assertEq(burnAmount, burnERC20Amount);
+        // stop prank and exit the test
+        vm.stopPrank();
+    }
 }
