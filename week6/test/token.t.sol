@@ -6,8 +6,8 @@ import {Test, console2} from "forge-std/Test.sol";
 import {WETH} from "../src/token.sol";
 
 interface IWETHEvents {
-    event  DepositEvent(address indexed addr, uint256 amount);
-    event  WithdrawalEvent(address indexed addr, uint256 amount);
+    event DepositEvent(address indexed addr, uint256 amount);
+    event WithdrawalEvent(address indexed addr, uint256 amount);
 }
 
 contract WrappedTokenTest is IWETHEvents, Test {
@@ -190,7 +190,7 @@ contract WrappedTokenTest is IWETHEvents, Test {
         // check user2 approve allowance for user2
         uint256 user2ApproveAllowance = weth.allowance(user1, user2);
         // assert the user1 allowance amount for user2
-        assertEq(user2ApproveAllowance-user2OriginalAllowance, 1 ether);
+        assertEq(user2ApproveAllowance - user2OriginalAllowance, 1 ether);
         // stop prank and exit the test
         vm.stopPrank();
     }
@@ -252,5 +252,4 @@ contract WrappedTokenTest is IWETHEvents, Test {
         // stop prank and exit the test
         vm.stopPrank();
     }
-
 }
