@@ -97,6 +97,33 @@ contract WrappedTokenTest is IWETHEvents, Test {
         vm.stopPrank();
     }
 
+    function test_WithdrawTokenAmountEqualReceiveEtherAmount() public {
+        // create user account
+        address user = makeAddr("user");
+        // set user address for the following function call
+        vm.startPrank(user);
+        // set ether balance for user
+        deal(user, 1 ether);
+        // user deposit 1 ether balance to the contract
+        weth.deposit{value: 1 ether}();
+        // check the user ether balance after deposit
+        uint256 depositUserEtherBalance = payable(user).balance;
+        // check the contract ether balance after deposit
+        uint256 depositContractEtherBalance = payable(weth).balance;
+        // perform withdraw for 1 ether
+        weth.withdraw(1 ether);
+        // check total user ether balance after withdrawal
+        uint256 totalUserEtherBalance = payable(user).balance;
+        // check total contract ether balance after withdrawal
+        uint256 totalContractEtherBalance = payable(weth).balance;
+        // validate the user balance difference
+        assertEq(totalUserEtherBalance - depositUserEtherBalance, 1 ether);
+        // validate the contract balance difference
+        assertEq(depositContractEtherBalance - totalContractEtherBalance, 1 ether);
+        // stop prank and exit the test
+        vm.stopPrank();
+    }
+
     function test_CheckWithdrawEventEmitSuccess() public {
         // create user account
         address user = makeAddr("user");
