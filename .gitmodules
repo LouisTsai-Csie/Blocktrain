@@ -4,3 +4,9 @@
 [submodule "practice/lib/openzeppelin-contracts"]
 	path = practice/lib/openzeppelin-contracts
 	url = https://github.com/openzeppelin/openzeppelin-contracts
+[submodule "practice/lib/foundry-chainlink-toolkit"]
+	path = practice/lib/foundry-chainlink-toolkit
+	url = https://github.com/smartcontractkit/foundry-chainlink-toolkit
+[submodule "practice/lib/chainlink-brownie-contracts"]
+	path = practice/lib/chainlink-brownie-contracts
+	url = https://github.com/smartcontractkit/chainlink-brownie-contracts
