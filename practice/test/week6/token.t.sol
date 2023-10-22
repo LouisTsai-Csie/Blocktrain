@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import {Test, console2} from "forge-std/Test.sol";
 
-import {WETH} from "../src/token.sol";
+import {WETH} from "../../src/week6/token.sol";
 
 interface IWETHEvents {
     event DepositEvent(address indexed addr, uint256 amount);
